@@ -28,7 +28,7 @@ author:
  -
     fullname: Your Name Here
     organization: Your Organization Here
-    email: your.email@example.com
+    email: "42705918+BasilGuo@users.noreply.github.com"
 
 normative:
 
