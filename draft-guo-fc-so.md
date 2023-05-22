@@ -17,10 +17,10 @@ v: 3
 # - unicorn
 # - sparkling distributed ledger
 venue:
-#  group: WG
-#  type: Working Group
-#  mail: WG@example.com
-#  arch: https://example.com/WG
+  #  group: WG
+  #  type: Working Group
+  #  mail: WG@example.com
+  #  arch: https://example.com/WG
   github: "BasilGuo/fc-signed-object"
   latest: "https://BasilGuo.github.io/fc-signed-object/draft-guo-fc-so.html"
 
@@ -43,9 +43,9 @@ author:
     email: "904542587@qq.com" # TODO: use your edu.cn email
 
 normative:
-    RFC4271
-    RFC6480
-    RFC6488
+    RFC4271:
+    RFC6480:
+    RFC6488:
 
 informative:
 
