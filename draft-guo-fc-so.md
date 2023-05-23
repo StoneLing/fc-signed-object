@@ -68,7 +68,7 @@ TODO
 
 # The FC Content-Type
 
-The content-type for a FC is defined as ForwardingCommitment and has the numerical value of (TODO OID). 
+The content-type for a FC is defined as ForwardingCommitment and has the numerical value of (TODO OID).
 
 This OID MUST appear both within the eContentType in the encapContentInfo object as well as the content-type signed attribute in the signerInfo object (see {{RFC6488}}).
 
@@ -82,22 +82,22 @@ The content of a FC identifies a forwarding commitments and forwarding bindings 
         prefixS SEQUENCE (SIZE(1..MAX)) OF Prefix,
         prefixD SEQUENCE (SIZE(1..MAX)) OF Prefix,
         fc FC }
-    
+
     ASID ::= INTEGER
-    
+
     Prefix ::= SEQUENCE {
         afi AFI,
         address IPAddress,
         prefixLength INTEGER }
-    
+
     AFI ::= OCTET STRING (SIZE(2))
-    
+
     IPAddress ::= BIT STRING
-    
+
     FC ::= SEQUENCE {
         sig BIT STRING
         hash BIT STRING }
-    
+
 Note that this content appears as the eContent within the encapContentInfo (see {{RFC6488}}).
 
 ## version
