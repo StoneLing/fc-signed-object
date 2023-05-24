@@ -63,7 +63,7 @@ informative:
       author:
         - ins: ITU-T
       seriesinfo: "Recommendation ITU-T X.690"
-    
+
 
 --- abstract
 
@@ -104,9 +104,9 @@ The content of a FC identifies a forwarding commitment and forwarding binding th
 
     ct-FC CONTENT-TYPE ::=
         { ForwardingCommitmentAttestation IDENTIFIED BY id-ct-FC }
-    
+
     id-ct-FC OBJECT IDENTIFIER ::= { id-ct TBD }
-    
+
     ForwardingCommitmentAttestation ::= SEQUENCE {
         version [0]         INTEGER DEFAULT 0,
         asID                ASID,
