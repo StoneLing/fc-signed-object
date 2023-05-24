@@ -43,7 +43,6 @@ author:
       email: "904542587@qq.com" # TODO: use your edu.cn email
 
 normative:
-    RFC4271:
     RFC5652:
     RFC6480:
     RFC6485:
@@ -64,8 +63,6 @@ informative:
       author:
         - ins: ITU-T
       seriesinfo: "Recommendation ITU-T X.690"
-    RFC6482bis:
-      =:I-D.ietf-sidrops-rfc6482bis
     
 
 --- abstract
@@ -77,9 +74,8 @@ This document defines a standard profile for Forwarding Commitment (FC) used in 
 
 # Introduction
 
-The primary purpose of the Resource Public Key Infrastructure (RPKI) is to improve routing security.  (See {{RFC6480}} for more information.)
-
-As part of this system, a mechanism is needed to allow entities to verify that an AS has been given permission by an IP    address block holder to advertise routes to one or more prefixes within that block. A FC provides this function.
+TODO: need more revised.
+The primary purpose of the Resource Public Key Infrastructure (RPKI) is to improve routing security.  (See {{RFC6480}} for more information.) As part of this system, a mechanism is needed to allow entities to verify that an AS has been given permission by an IP address holder to advertise route along the propagation path. A FC provides this function.
 
 Forwarding Commitment (FC) is a signed object that binds IP prefix with AS and its next hops, eventually it could compose and protect the path of BGP update propagation. It uses a Web of Trust in this propagation model. That means It performs more like that originator AS trusts its next hop ASes and sends its route to its next hops. By this means orginator AS has authorized its next hops to propagate its own prefix. And originator AS's next hops would also recive this prefix and send to its next hops. The relationship among them is the signed FC. The Forwarding Commitments also tell the ASes in the propagation path that the previous hop AS has received and selected this AS_PATH.
 
