@@ -25,41 +25,64 @@ venue:
   latest: "https://BasilGuo.github.io/fc-signed-object/draft-guo-fc-so.html"
 
 author:
--
-    fullname: Ke Xu
-    organization: Tsinghua University
-    email: xuke@tsinghua.edu.cn
--
-    fullname: Xiaoliang Wang
-    orgnaization: Tsinghua University
-    email:
--
-    fullname: Yangfei Guo
-    orgnization: Zhongguancun Labratory
-    email: guoyangfei@zgclab.edu.cn
--
-    fullname: Jiangou Zhan
-    orgnization: Tsinghua University
-    email: "904542587@qq.com" # TODO: use your edu.cn email
+  -
+      fullname: Ke Xu
+      organization: Tsinghua University
+      email: xuke@tsinghua.edu.cn
+  -
+      fullname: Xiaoliang Wang
+      orgnaization: Tsinghua University
+      email: wangxiaoliang0623@foxmail.com
+  -
+      fullname: Yangfei Guo
+      orgnization: Zhongguancun Labratory
+      email: guoyangfei@zgclab.edu.cn
+  -
+      fullname: Jiangou Zhan
+      orgnization: Tsinghua University
+      email: "904542587@qq.com" # TODO: use your edu.cn email
 
 normative:
     RFC4271:
+    RFC5652:
     RFC6480:
+    RFC6485:
     RFC6488:
 
 informative:
-
+    X.680:
+      title: "Information technology -- Abstract Syntax Notation One (ASN.1): Specification of basic notation"
+      target: "https://itu.int/rec/T-REC-X.680-202102-I/en"
+      date: Feb. 2021
+      author:
+        -org: ITU-T
+      seriesinfo: Recommendation ITU-T X.680 | ISO/IEC 8824-1
+    X.690:
+      title: "Information technology - ASN.1 encoding rules: Specification of Basic Encoding Rules (BER), Canonical Encoding Rules (CER) and Distinguished Encoding Rules (DER)"
+      target: "[https://itu.int/rec/T-REC-X.680-202102-I/en](https://www.itu.int/rec/T-REC-X.690-202102-I/en)"
+      date: Feb. 2021
+      author:
+        -org: ITU-T
+      seriesinfo: Recommendation ITU-T X.690 | ISO/IEC 8825-1
 
 --- abstract
 
-This document defines a standard profile for Forwarding Commitment (FC) objects for use with the Resource Public Key Infrastructure (RPKI). A FC is a digitally signed object that provides a means of verifying that an IP address prefix is announced by `AS a` to `AS b`. When validate, an FC's eContent can be used for detection and mitigation of route hijacking.
+This document defines a standard profile for Forwarding Commitment (FC) used in Resource Public Key Infrastructure (RPKI). A FC is a digitally signed object that provides a means of verifying that an IP address prefix is announced from `AS a` to `AS b`. When validated, a FC's eContent can be used for detection and mitigation of route hijacking and provide protection for the AS_PATH attribute in BGP update.
 
 
 --- middle
 
 # Introduction
 
-TODO
+Forwarding Commitment (FC) is a signed object that binds IP prefix with AS and its next hops, eventually it could compose and protect the path of BGP update propagation. It uses a Web of Trust in this propagation model. That means It performs more like that originator AS trusts its next hop ASes and sends its route to its next hops. By this means orginator AS has authorized its next hops to propagate its own prefix. And originator AS's next hops would also recive this prefix and send to its next hops. The relationship among them is the signed FC. The Forwarding Commitments also tell the ASes in the propagation path that the previous hop AS has received and selected this AS_PATH.
+
+The FC uses the template for RPKI digitally signed objects {{RFC6488}} for the definition of a Cryptographic Message Syntax (CMS) {{RFC5652}} wrapper for the FC content as well as a generic validation procedure for RPKI signed objects.  As FCs need to be validated with RPKI certificates issued by the current infrastructure, we assume the mandatory-to-implement algorithms in {{RFC6485}}, or its successor.
+
+To complete the specification of the FC (see {{Section 4 of RFC6488}}), this document defines:
+
+1.  The object identifier (OID) that identifies the FC signed object. This OID appears in the eContentType field of the encapContentInfo object as well as the content-type signed attribute within the signerInfo structure).
+2.  The ASN.1 syntax for the FC content, which is the payload signed by the BGP speaker. The FC content is encoded using the ASN.1 {{X.680}} Distinguished Encoding Rules (DER) {{X.690}}.
+3.  The steps required to validate an FC beyond the validation steps specified in {{RFC6488}}).
 
 ## Requirements Language
 
@@ -125,16 +148,14 @@ TODO: fc-signature maybe coincide with some filed in SignerInfo. So it could rem
 
 TBD.
 
-
-
 # Security Considerations
 
-TODO Security
+TODO: Security
 
 
 # IANA Considerations
 
-This document has no IANA actions.
+TODO: An OID for FC is needed.
 
 
 --- back
