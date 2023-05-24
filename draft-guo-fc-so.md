@@ -55,15 +55,18 @@ informative:
       target: "https://itu.int/rec/T-REC-X.680-202102-I/en"
       date: Feb. 2021
       author:
-        -org: ITU-T
-      seriesinfo: Recommendation ITU-T X.680 | ISO/IEC 8824-1
+        - ins: ITU-T
+      seriesinfo: "Recommendation ITU-T X.680"
     X.690:
       title: "Information technology - ASN.1 encoding rules: Specification of Basic Encoding Rules (BER), Canonical Encoding Rules (CER) and Distinguished Encoding Rules (DER)"
       target: "[https://itu.int/rec/T-REC-X.680-202102-I/en](https://www.itu.int/rec/T-REC-X.690-202102-I/en)"
       date: Feb. 2021
       author:
-        -org: ITU-T
-      seriesinfo: Recommendation ITU-T X.690 | ISO/IEC 8825-1
+        - ins: ITU-T
+      seriesinfo: "Recommendation ITU-T X.690"
+    RFC6482bis:
+      =:I-D.ietf-sidrops-rfc6482bis
+    
 
 --- abstract
 
@@ -73,6 +76,10 @@ This document defines a standard profile for Forwarding Commitment (FC) used in 
 --- middle
 
 # Introduction
+
+The primary purpose of the Resource Public Key Infrastructure (RPKI) is to improve routing security.  (See {{RFC6480}} for more information.)
+
+As part of this system, a mechanism is needed to allow entities to verify that an AS has been given permission by an IP    address block holder to advertise routes to one or more prefixes within that block. A FC provides this function.
 
 Forwarding Commitment (FC) is a signed object that binds IP prefix with AS and its next hops, eventually it could compose and protect the path of BGP update propagation. It uses a Web of Trust in this propagation model. That means It performs more like that originator AS trusts its next hop ASes and sends its route to its next hops. By this means orginator AS has authorized its next hops to propagate its own prefix. And originator AS's next hops would also recive this prefix and send to its next hops. The relationship among them is the signed FC. The Forwarding Commitments also tell the ASes in the propagation path that the previous hop AS has received and selected this AS_PATH.
 
@@ -91,34 +98,39 @@ To complete the specification of the FC (see {{Section 4 of RFC6488}}), this doc
 
 # The FC Content-Type
 
-The content-type for a FC is defined as ForwardingCommitment and has the numerical value of (TODO OID).
+The content-type for a FC is defined as ForwardingCommitment and has the numerical value of 1.2.840.113549.1.9.16.1.(TBD).
 
 This OID MUST appear both within the eContentType in the encapContentInfo object as well as the content-type signed attribute in the signerInfo object (see {{RFC6488}}).
 
 # The FC eContent
 
-The content of a FC identifies a forwarding commitments and forwarding bindings that an Autonomous System (AS) announces to other nodes upon receiving BGP-update messages. Other ASes which on-path can validate the FC and perform path verification for traffic forwarding based on the AS-path information. Off-path ASes can utilize this FC for collaborative filtering. A FC is formally defined as:
+The content of a FC identifies a forwarding commitment and forwarding binding that an AS announces to other nodes upon receiving BGP-update message. Other ASes which on-path can validate the FC and perform path verification for traffic forwarding based on the AS-path information. Off-path ASes can utilize this FC for collaborative filtering. A FC is formally defined as:
 
-    ForwardingCommitment ::= SEQUENCE {
-        version [0] INTEGER DEFAULT 0,
-        asID  ASID,
-        prefix Prefix,
+    ct-FC CONTENT-TYPE ::=
+        { ForwardingCommitmentAttestation IDENTIFIED BY id-ct-FC }
+    
+    id-ct-FC OBJECT IDENTIFIER ::= { id-ct TBD }
+    
+    ForwardingCommitmentAttestation ::= SEQUENCE {
+        version [0]         INTEGER DEFAULT 0,
+        asID                ASID,
+        prefix              SEQUENCE (SIZE(1)) OF Prefix,
         fc FC }
 
-    ASID ::= INTEGER
+    ASID ::= INTEGER (0..4294967295)
 
     Prefix ::= SEQUENCE {
-        afi AFI,
-        address IPAddress,
-        prefixLength INTEGER }
+        afi                 AFI,
+        address             IPAddress,
+        prefixLength        INTEGER (SIZE(0..128)}
 
     AFI ::= OCTET STRING (SIZE(2))
 
-    IPAddress ::= BIT STRING
+    IPAddress ::= BIT STRING (SIZE(0..128))
 
     FC ::= SEQUENCE {
-        id BIT STRING
-        signature BIT STRING }
+        id                  BIT STRING
+        signature           BIT STRING }
 
 Note that this content appears as the eContent within the encapContentInfo (see {{RFC6488}}).
 
