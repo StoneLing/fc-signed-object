@@ -105,7 +105,7 @@ The content of a FC identifies a forwarding commitment and forwarding binding th
 
 RPKI-FC-2023
   { iso(1) member-body(2) us(840) rsadsi(113549) pkcs(1)
-     pkcs-9(9) smime(16) modules(0) id-mod-rpki-FC-2022(TBD) }
+     pkcs-9(9) smime(16) modules(0) id-mod-rpki-FC-2023(TBD) }
 
 DEFINITIONS EXPLICIT TAGS ::=
 BEGIN
@@ -181,15 +181,24 @@ The id field contains the hash of current AS-path in the associated BGP-UPDATE p
 
 ### Element signature
 
-Field signature is a signature signs by BGP speaker who issues this FC. We would give an example in {{fc-validation}}.
+Field signature is a signature signs by BGP speaker who issues this FC. We would give an example in {{fc-verification}}.
 
-# FC Validation {#fc-validation}
+# FC Validation
 
-Before a relying party can use a FC to validate a routing announcement, the relying party MUST first validate the FC. To validate a FC, the relying party MUST perform all the validation checks specified in {{RFC6488}} as well as the following additional FC-specific validation steps.
+
+Before a relying party can sign a new FC to announce it has trusted and selected the routing announcement, the relying party MUST first validate the FC object itself. To validate a FC, the relying party MUST perform all the validation checks specified in {{RFC6488}} as well as the following additional FC-specific validation step.
 
 - The IP Address Delegation extension {{RFC3779}} is present in the end-entity (EE) certificate (contained within the FC), and IP address prefix in the FC payload is contained within the set of IP addresses specified by the EE certificate's IP Address Delegation extension.
+
 - The EE certificate's IP Address Delegation extension MUST NOT contain "inherit" elements described in {{RFC3779}}.
-- The Autonomous System Identifier Delegation Extension described in {{RFC3779}} is not used in Forwarding Commitment and MUST NOT be present in the EE certificate.
+
+- The Autonomous System Identifier Delegation Extension described in {{RFC3779}} is also used in Forwarding Commitment and MUST be present in the EE certificate.
+
+
+
+# FC based BGP AS_PATH verification {#fc-verification}
+
+
 
 
 # Security Considerations
@@ -199,8 +208,49 @@ TODO: Security
 
 # IANA Considerations
 
-TODO: An OID for FC is needed.
+## SMI Security for S/MIME CMS Content Type (1.2.840.113549.1.9.16.1)
 
+ Please add the id-mod-rpki-fc-2023 to the SMI Security for S/MIME Module Identifier (1.2.840.113549.1.9.16.0) registry (https://www.iana.org/assignments/smi-numbers/smi-numbers.xml#security-smime-0) as follows:
+
+~~~~~~
+Decimal    Description                   Specification
+---------------------------------------------------------------------
+TBD        id-mod-rpki-fc-2023           [RFC-to-be]
+~~~~~~
+
+## SMI Security for S/MIME CMS Content Type registry
+
+Please add the FC to the SMI Security for S/MIME CMS Content Type (1.2.840.113549.1.9.16.1) registry (https://www.iana.org/assignments/smi-numbers/smi-numbers.xml#security-smime-1) as follows:
+
+~~~~~~
+Decimal     Description                  Specification
+---------------------------------------------------------------------
+TBD         id-ct-FC                     [RFC-to-be]
+~~~~~~
+
+## RPKI Signed Object registry
+
+Please add Autonomous System Provider Authorization to the RPKI Signed Object registry (https://www.iana.org/assignments/rpki/rpki.xhtml#signed-objects) as follows:
+
+~~~~~~
+Name        OID                          Specification
+---------------------------------------------------------------------
+Forwarding 
+Commitment  1.2.840.113549.1.9.16.1.TBD  [RFC-to-be]
+~~~~~~
+
+<!-- NOT now
+## RPKI Repository Name Scheme registry
+
+Please add an item for the Autonomous System Provider Authorization file extension to the "RPKI Repository Name Scheme" registry created by [RFC6481] as follows:
+
+~~~~~~
+Filename
+Extension  RPKI Object                    Reference
+---------------------------------------------------------------------
+  .fc      Forwarding Commitment          [RFC-to-be]
+~~~~~~
+-->
 
 --- back
 
