@@ -235,7 +235,7 @@ Please add Autonomous System Provider Authorization to the RPKI Signed Object re
 ~~~~~~
 Name        OID                          Specification
 ---------------------------------------------------------------------
-Forwarding 
+Forwarding
 Commitment  1.2.840.113549.1.9.16.1.TBD  [RFC-to-be]
 ~~~~~~
 
