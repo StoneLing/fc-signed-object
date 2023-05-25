@@ -161,7 +161,7 @@ Within the Prefix structure, the prefix field encodes the set of IP address pref
 
 ### Element afi
 
-Within the Prefix structure, afi contains the Address Family Identifier of an IP address family. This specification only supports IPv4 and IPv6. Therefore, afi MUST be either 0001 or 0002. 
+Within the Prefix structure, afi contains the Address Family Identifier of an IP address family. This specification only supports IPv4 and IPv6. Therefore, afi MUST be either 0001 or 0002.
 
 ### Element address
 
