@@ -239,19 +239,6 @@ Forwarding
 Commitment  1.2.840.113549.1.9.16.1.TBD  [RFC-to-be]
 ~~~~~~
 
-<!-- NOT now
-## RPKI Repository Name Scheme registry
-
-Please add an item for the Autonomous System Provider Authorization file extension to the "RPKI Repository Name Scheme" registry created by [RFC6481] as follows:
-
-~~~~~~
-Filename
-Extension  RPKI Object                    Reference
----------------------------------------------------------------------
-  .fc      Forwarding Commitment          [RFC-to-be]
-~~~~~~
--->
-
 --- back
 
 # Acknowledgments
