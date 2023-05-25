@@ -28,26 +28,42 @@ author:
   -
       fullname: Ke Xu
       organization: Tsinghua University
+      city: Beijing
+      country: China
       email: xuke@tsinghua.edu.cn
   -
       fullname: Xiaoliang Wang
       orgnaization: Tsinghua University
+      city: Beijing
+      country: China
       email: wangxiaoliang0623@foxmail.com
   -
       fullname: Yangfei Guo
       orgnization: Zhongguancun Labratory
+      city: Beijing
+      country: China
       email: guoyangfei@zgclab.edu.cn
   -
       fullname: Jiangou Zhan
       orgnization: Tsinghua University
+      city: Beijing
+      country: China
       email: "904542587@qq.com" # TODO: use your edu.cn email
+  -
+      fullname: Jianping Wu
+      org: Tsinghua University
+      city: Beijing
+      country: China
+      email: jianping@cernet.edu.cn
 
 normative:
     RFC3779:
+    RFC4271:
     RFC5652:
     RFC6480:
     RFC6485:
     RFC6488:
+    RFC7908:
 
 informative:
     X.680:
@@ -75,10 +91,12 @@ This document defines a standard profile for Forwarding Commitment (FC) used in 
 
 # Introduction
 
-TODO: need more revised.
+
+The Border Gateway Protocol (BGP) {{RFC4271}} was designed with no mechanisms to validate the security of BGP attributes. There are two types of BGP security issues, BGP Hijacks and BGP Route Leaks {{!RFC7908}}, plagues Internet security.
+
 The primary purpose of the Resource Public Key Infrastructure (RPKI) is to improve routing security.  (See {{RFC6480}} for more information.) As part of this system, a mechanism is needed to allow entities to verify that an AS has been given permission by an IP address holder to advertise route along the propagation path. A FC provides this function.
 
-Forwarding Commitment (FC) is a signed object that binds IP prefix with AS and its next hops, eventually it could compose and protect the path of BGP-UPDATE propagation. It uses a Web of Trust in this propagation model. That means It performs more like that originator AS trusts its next hop ASes and sends its route to its next hops. By this means orginator AS has authorized its next hops to propagate its own prefix. And originator AS's next hops would also recive this prefix and send to its next hops. The relationship among them is the signed FC. The Forwarding Commitments also tell the ASes in the propagation path that the previous hop AS has received and selected this AS_PATH.
+Forwarding Commitment (FC) is a signed object that binds IP prefix with AS and its next hops, eventually it could compose and protect the path of BGP-UPDATE propagation. It uses a Web of Trust in this propagation model. That means It performs more like that originator AS trusts its next hop ASes and sends its route to its next hops. By this means orginator AS has authorized its next hops to propagate its own prefix. And originator AS's next hops would also recive this prefix and send to its next hops. The relationship among them is the signed FC. Than means a FC attests that a downstream AS has been selected by the upstream AS who links to the downstream AS directly to announce the IP prefix. The ASes of propagation path of one IP prefix should sign such a FC independently. All the FCs of one IP prefix propagation path could detect if there are any route leaks and filter route hijacks. The Forwarding Commitments also tell the ASes in the propagation path that the previous hop AS has received and selected this AS_PATH.
 
 The FC uses the template for RPKI digitally signed objects {{RFC6488}} for the definition of a Cryptographic Message Syntax (CMS) {{RFC5652}} wrapper for the FC content as well as a generic validation procedure for RPKI signed objects.  As FCs need to be validated with RPKI certificates issued by the current infrastructure, we assume the mandatory-to-implement algorithms in {{RFC6485}}, or its successor.
 
@@ -198,12 +216,25 @@ Before a relying party can sign a new FC to announce it has trusted and selected
 
 # FC based BGP AS_PATH verification {#fc-verification}
 
+## FC Generation
+
+When one AS establish connection with its peer, it announces its route to 
+
+## FC Verification
+
+When one AS receives one BGP update, it MUST do as usual: filter BGP route as its local policy, fill BGP route to its Route Information Base (RIB) table, generate Forwarding Information Base (FIB) table, and send it out.
+
+## AS_PATH Verification
 
 
 
 # Security Considerations
 
-TODO: Security
+## Route Aggregation
+
+There is no mechanism in FC could protect one prefix has been aggregated along the route propagation.
+
+Maybe a MinLength like MaxLength in ROA could help to mitigate the effects of route aggregation. This field means it permits who to aggregate and aggregate to which degree.
 
 
 # IANA Considerations
