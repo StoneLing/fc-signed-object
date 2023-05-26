@@ -199,7 +199,7 @@ The id field contains the hash of current AS-path in the associated BGP-UPDATE p
 
 ### Element signature
 
-Field signature is a signature signs by BGP speaker who issues this FC. We would give an example in {{fc-verification}}.
+Field signature is a signature signs by BGP speaker who issues this FC.
 
 # FC Validation
 
@@ -214,19 +214,79 @@ Before a relying party can sign a new FC to announce it has trusted and selected
 
 
 
-# FC based BGP AS_PATH verification {#fc-verification}
+# FC based BGP AS_PATH Verification {#fc-verification}
 
 ## FC Generation
 
-When one AS establish connection with its peer, it announces its route to 
+The FC generation procedure follows the BGP-UPDATE. When one AS establish connection with its peer, it announces its route to peers. It SHOULD generate FC for each IP prefix in the BGP-UPDATE. For example, there are 3 ASes and the topology of them is in a line as {{fig-example}} shows.
 
-## FC Verification
+~~~~~~
++-------+     +-------+     +-------+
+| AS 10 | --- | AS 20 | --- | AS 30 |
++-------+     +-------+     +-------+
+~~~~~~
+{: #fig-example title="A topology example of 3 AS"}
 
-When one AS receives one BGP update, it MUST do as usual: filter BGP route as its local policy, fill BGP route to its Route Information Base (RIB) table, generate Forwarding Information Base (FIB) table, and send it out.
+Suppose that the simplified RIB table of AS 10 is as follows. That means there are 1 BGP-UPDATE is announced from AS 30 to AS 20 and 1 BGP-UPDATE is announced from AS 20 to AS 10. It would generate one FC for prefix 30.0.0.0/8  when BGP-UPDATE is announced from AS 30 to AS 20. But when BGP-UPDATE is announced from AS 20 to AS 10, it would generate two FCs, one for prefix 30.0.0.0 and one for prefix 20.0.0.0/8.
 
-## AS_PATH Verification
+~~~~~~
+Network      Next Hop    Path
+10.0.0.0/8   0.0.0.0     i
+20.0.0.0/8   10.0.0.1    20 i
+30.0.0.0/8   10.0.0.1    20 30 i
+~~~~~~
+{: #fig-rib-of-AS10 title="Simplified RIB table of AS 10"}
 
+For BGP-UPDATE announced from AS 30 to AS 20, it fills the eContent of FC signed object as follows:
 
+~~~~~~
+FC_{30, 20}:
+  version: 0
+  orginatorASID: 30
+  prefix:
+    afi: 1
+    address: 30.0.0.0
+    prefixLength: 8
+  ForwardingCommitment:
+    id: HASH({30}, 20, 30.0.0.0/8)
+    signature: SIGNATURE1
+~~~~~~
+
+For BGP-UPDATE announced from AS 30 to AS 20, it fills the eContent of FC signed objects as follows:
+
+~~~~~~
+FC_{30, 20, 10}:
+  version: 0
+  orginatorASID: 30
+  prefix:
+    afi: 1
+    address: 30.0.0.0
+    prefixLength: 8
+  ForwardingCommitment:
+    id: HASH({30, 20}, 10, 30.0.0.0/8)
+    signature: SIGNATURE2
+
+FC_{20, 10}:
+  version: 0
+  orginatorASID: 20
+  prefix:
+    afi: 1
+    address: 20.0.0.0
+    prefixLength: 8
+  ForwardingCommitment:
+    id: HASH({20}, 20.0.0.0/8)
+    signature: SIGNATURE3
+~~~~~~
+
+These FC signed objects MUST store into RPKI repository as soon as possible after BGP announcement.
+
+## FC Verification and AS_PATH Verification
+
+When one AS receives one BGP-UPDATE, it MUST do as usual: filter BGP route using its local policy, scratch BGP route to its Route Information Base (RIB) table, generate Forwarding Information Base (FIB) table, and send it out as per routing policy.
+
+When the FC signed objects synchronize from RPKI repository, the BGP speaker MUST find FCs according to the ForwardingCommitment-id: HASH(current_AS_PATH, nextHopAS, prefix) in its RIB. If it finds one matched, the BGP speaker verifies the ForwardingCommitment-signature in RPKI repository.
+
+It SHOULD verify all FCs along the AS_PATH for AS_PATH verification. For example, AS 10 should verify FC_{30, 20} and FC_{30, 20, 10} for prefix 30.0.0.0/8 in {{fig-example}}. If all FCs check passed, the AS_PATH would be a valid one.
 
 # Security Considerations
 
