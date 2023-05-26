@@ -27,25 +27,25 @@ venue:
 author:
   -
       fullname: Ke Xu
-      organization: Tsinghua University
+      org: Tsinghua University
       city: Beijing
       country: China
       email: xuke@tsinghua.edu.cn
   -
       fullname: Xiaoliang Wang
-      orgnaization: Tsinghua University
+      org: Tsinghua University
       city: Beijing
       country: China
       email: wangxiaoliang0623@foxmail.com
   -
       fullname: Yangfei Guo
-      orgnization: Zhongguancun Labratory
+      org: Zhongguancun Labratory
       city: Beijing
       country: China
       email: guoyangfei@zgclab.edu.cn
   -
       fullname: Jiangou Zhan
-      orgnization: Tsinghua University
+      org: Tsinghua University
       city: Beijing
       country: China
       email: "904542587@qq.com" # TODO: use your edu.cn email
