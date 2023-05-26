@@ -224,60 +224,60 @@ Before a relying party can sign a new FC to announce it has trusted and selected
 The FC generation procedure follows the BGP-UPDATE. When one AS establish connection with its peer, it announces its route to peers. It SHOULD generate FC for each IP prefix in the BGP-UPDATE. For example, there are 3 ASes and the topology of them is in a line as {{fig-example}} shows.
 
 ~~~~~~
-+-------+     +-------+     +-------+
-| AS 10 | --- | AS 20 | --- | AS 30 |
-+-------+     +-------+     +-------+
++----------+     +----------+     +----------+
+| AS 65536 | --- | AS 65537 | --- | AS 65538 |
++----------+     +----------+     +----------+
 ~~~~~~
 {: #fig-example title="A topology example of 3 AS"}
 
-Suppose that the simplified RIB table of AS 10 is as follows. That means there are 1 BGP-UPDATE is announced from AS 30 to AS 20 and 1 BGP-UPDATE is announced from AS 20 to AS 10. It would generate one FC for prefix 30.0.0.0/8  when BGP-UPDATE is announced from AS 30 to AS 20. But when BGP-UPDATE is announced from AS 20 to AS 10, it would generate two FCs, one for prefix 30.0.0.0 and one for prefix 20.0.0.0/8.
+Suppose that the simplified RIB table of AS 65536 is as follows. That means there are 1 BGP-UPDATE is announced from AS 65538 to AS 65537 and 1 BGP-UPDATE is announced from AS 65537 to AS 65536. It would generate one FC for prefix 2001:db8:c::/48  when BGP-UPDATE is announced from AS 65538 to AS 65537. But when BGP-UPDATE is announced from AS 65537 to AS 65536, it would generate two FCs, one for prefix 2001:db8:c::/48 and one for prefix 2001:db8:b::/48.
 
 ~~~~~~
-Network      Next Hop    Path
-10.0.0.0/8   0.0.0.0     i
-20.0.0.0/8   10.0.0.1    20 i
-30.0.0.0/8   10.0.0.1    20 30 i
+Network           Next Hop        Path
+2001:db8:a::/48   ::              i
+2001:db8:b::/48   2001:db8:a::1   20 i
+2001:db8:c::/48   2001:db8:a::1   20 30 i
 ~~~~~~
-{: #fig-rib-of-AS10 title="Simplified RIB table of AS 10"}
+{: #fig-rib-of-AS65536 title="Simplified RIB table of AS 65536"}
 
-For BGP-UPDATE announced from AS 30 to AS 20, it fills the eContent of FC signed object as follows:
+For BGP-UPDATE announced from AS 65538 to AS 65537, it fills the eContent of FC signed object as follows:
 
 ~~~~~~
-FC_{30, 20}:
+FC_{65538, 65537}:
   version: 0
-  orginatorASID: 30
+  orginatorASID: 65538
   prefix:
-    afi: 1
-    address: 30.0.0.0
-    prefixLength: 8
+    afi: 2
+    address: 2001:db8:c::
+    prefixLength: 48
   ForwardingCommitment:
-    id: HASH({30}, 20, 30.0.0.0/8)
+    id: HASH({65538}, 65537, 2001:db8:c::/48)
     signature: SIGNATURE1
 ~~~~~~
 
-For BGP-UPDATE announced from AS 30 to AS 20, it fills the eContent of FC signed objects as follows:
+For BGP-UPDATE announced from AS 65538 to AS 65537, it fills the eContent of FC signed objects as follows:
 
 ~~~~~~
-FC_{30, 20, 10}:
+FC_{65538, 65537, 65536}:
   version: 0
-  orginatorASID: 30
+  orginatorASID: 65538
   prefix:
-    afi: 1
-    address: 30.0.0.0
-    prefixLength: 8
+    afi: 2
+    address: 2001:db8:c::
+    prefixLength: 48
   ForwardingCommitment:
-    id: HASH({30, 20}, 10, 30.0.0.0/8)
+    id: HASH({65538, 65537}, 65536, 2001:db8:c::/48)
     signature: SIGNATURE2
 
-FC_{20, 10}:
+FC_{65537, 65536}:
   version: 0
-  orginatorASID: 20
+  orginatorASID: 65537
   prefix:
-    afi: 1
-    address: 20.0.0.0
-    prefixLength: 8
+    afi: 2
+    address: 2001:db8:b::
+    prefixLength: 48
   ForwardingCommitment:
-    id: HASH({20}, 20.0.0.0/8)
+    id: HASH({65537}, 2001:db8:b::/48)
     signature: SIGNATURE3
 ~~~~~~
 
@@ -289,7 +289,7 @@ When one AS receives one BGP-UPDATE, it MUST do as usual: filter BGP route using
 
 When the FC signed objects synchronize from RPKI repository, the BGP speaker MUST find FCs according to the ForwardingCommitment-id: HASH(current_AS_PATH, nextHopAS, prefix) in its RIB. If it finds one matched, the BGP speaker verifies the ForwardingCommitment-signature in RPKI repository.
 
-It SHOULD verify all FCs along the AS_PATH for AS_PATH verification. For example, AS 10 should verify FC_{30, 20} and FC_{30, 20, 10} for prefix 30.0.0.0/8 in {{fig-example}}. If all FCs check passed, the AS_PATH would be a valid one.
+It SHOULD verify all FCs along the AS_PATH for AS_PATH verification. For example, AS 65536 should verify FC_{65538, 65537} and FC_{65538, 65537, 65536} for prefix 2001:db8:c::/48 in {{fig-example}}. If all FCs check passed, the AS_PATH would be a valid one.
 
 # Security Considerations
 
