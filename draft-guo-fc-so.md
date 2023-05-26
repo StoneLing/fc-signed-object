@@ -121,6 +121,7 @@ This OID MUST appear both within the eContentType in the encapContentInfo object
 
 The content of a FC identifies a forwarding commitment and forwarding binding that an AS announces to other nodes upon receiving BGP-UPDATE message. Other ASes which on-path can validate the FC and perform path verification for traffic forwarding based on the AS-path information. Off-path ASes can utilize this FC for collaborative filtering. A FC is an instance of ForwardingCommitmentAttestation, formally defined by the following ASN.1 {{X.680}} module:
 
+~~~~~~
 RPKI-FC-2023
   { iso(1) member-body(2) us(840) rsadsi(113549) pkcs(1)
      pkcs-9(9) smime(16) modules(0) id-mod-rpki-FC-2023(TBD) }
@@ -162,6 +163,8 @@ ForwardingCommitment ::= SEQUENCE {
     signature           BIT STRING }
 
 END
+~~~~~~
+{: #fig-eContentFC title="eContent of FC signed object"}
 
 Note that this content appears as the eContent within the encapContentInfo (see {{RFC6488}}).
 
