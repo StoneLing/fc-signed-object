@@ -235,8 +235,8 @@ Suppose that the simplified RIB table of AS 65536 is as follows. That means ther
 ~~~~~~
 Network           Next Hop        Path
 2001:db8:a::/48   ::              i
-2001:db8:b::/48   2001:db8:a::1   20 i
-2001:db8:c::/48   2001:db8:a::1   20 30 i
+2001:db8:b::/48   2001:db8:a::1   65537 i
+2001:db8:c::/48   2001:db8:a::1   65537 65538 i
 ~~~~~~
 {: #fig-rib-of-AS65536 title="Simplified RIB table of AS 65536"}
 
