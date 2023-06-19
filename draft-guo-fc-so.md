@@ -324,7 +324,7 @@ TBD         id-ct-FC                     [RFC-to-be]
 
 ## RPKI Signed Object registry
 
-Please add Autonomous System Provider Authorization to the RPKI Signed Object registry (https://www.iana.org/assignments/rpki/rpki.xhtml#signed-objects) as follows:
+Please add Forwarding Commitment to the RPKI Signed Object registry (https://www.iana.org/assignments/rpki/rpki.xhtml#signed-objects) as follows:
 
 ~~~~~~
 Name        OID                          Specification
