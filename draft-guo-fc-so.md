@@ -277,7 +277,7 @@ FC_{65537, 65536}:
     address: 2001:db8:b::
     prefixLength: 48
   ForwardingCommitment:
-    id: HASH({65537}, 2001:db8:b::/48)
+    id: HASH({65537}, 65536, 2001:db8:b::/48)
     signature: SIGNATURE3
 ~~~~~~
 
