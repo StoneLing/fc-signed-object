@@ -84,7 +84,7 @@ informative:
 
 --- abstract
 
-This document defines a standard profile for Forwarding Commitment (FC) used in Resource Public Key Infrastructure (RPKI). A FC is a digitally signed object that provides a means of verifying that an IP address prefix is announced from `AS a` to `AS b`. When validated, a FC's eContent can be used for detection and mitigation of route hijacking and provide protection for the AS_PATH attribute in BGP-UPDATE.
+This document defines a standard profile for Forwarding Commitment (FC) used in Resource Public Key Infrastructure (RPKI). An FC is a digitally signed object that provides a means of verifying that an IP address prefix is announced from `AS a` to `AS b`. When validated, an FC's eContent can be used for the detection and mitigation of route hijacking and provide protection for the AS_PATH attribute in BGP-UPDATE.
 
 
 --- middle
@@ -94,17 +94,17 @@ This document defines a standard profile for Forwarding Commitment (FC) used in 
 
 The Border Gateway Protocol (BGP) {{RFC4271}} was designed with no mechanisms to validate the security of BGP attributes. There are two types of BGP security issues, BGP Hijacks and BGP Route Leaks {{!RFC7908}}, plagues Internet security.
 
-The primary purpose of the Resource Public Key Infrastructure (RPKI) is to improve routing security.  (See {{RFC6480}} for more information.) As part of this system, a mechanism is needed to allow entities to verify that an AS has been given permission by an IP address holder to advertise route along the propagation path. A FC provides this function.
+The primary purpose of the Resource Public Key Infrastructure (RPKI) is to improve routing security.  (See {{RFC6480}} for more information.) As part of this system, a mechanism is needed to allow entities to verify that an AS has been given permission by an IP address holder to advertise a route along the propagation path. An FC provides this function.
 
-Forwarding Commitment (FC) is a signed object that binds IP prefix with AS and its next hops, eventually it could compose and protect the path of BGP-UPDATE propagation. It uses a Web of Trust in this propagation model. That means It performs more like that originator AS trusts its next hop ASes and sends its route to its next hops. By this means orginator AS has authorized its next hops to propagate its own prefix. And originator AS's next hops would also recive this prefix and send to its next hops. The relationship among them is the signed FC. Than means a FC attests that a downstream AS has been selected by the upstream AS who links to the downstream AS directly to announce the IP prefix. The ASes of propagation path of one IP prefix should sign such a FC independently. All the FCs of one IP prefix propagation path could detect if there are any route leaks and filter route hijacks. The Forwarding Commitments also tell the ASes in the propagation path that the previous hop AS has received and selected this AS_PATH.
+Forwarding Commitment (FC) is a signed object that binds the IP prefix with AS and its next hops, eventually, it could compose and protect the path of BGP-UPDATE propagation. It uses a Web of Trust in this propagation model. That means It performs more like that originator AS trusts its next hop ASes and sends its route to its next hops. By this means originator AS has authorized its next hops to propagate its own prefix. And originator AS's next hops would also receive this prefix and send it to its next hops. The relationship among them is the signed FC. That means an FC attests that a downstream AS has been selected by the upstream AS that links to the downstream AS directly to announce the IP prefix. The ASes of the propagation path of one IP prefix should sign such an FC independently. All the FCs of one IP prefix propagation path could detect if there are any route leaks and filter route hijacks. The Forwarding Commitments also tell the ASes in the propagation path that the previous hop AS has received and selected this AS_PATH.
 
-The FC uses the template for RPKI digitally signed objects {{RFC6488}} for the definition of a Cryptographic Message Syntax (CMS) {{RFC5652}} wrapper for the FC content as well as a generic validation procedure for RPKI signed objects.  As FCs need to be validated with RPKI certificates issued by the current infrastructure, we assume the mandatory-to-implement algorithms in {{RFC6485}}, or its successor.
+The FC uses the template for RPKI digitally signed objects {{RFC6488}} for the definition of a Cryptographic Message Syntax (CMS) {{RFC5652}} wrapper for the FC content as well as a generic validation procedure for RPKI signed objects.  As FCs need to be validated with RPKI certificates issued by the current infrastructure, we assume the mandatory-to-implement algorithms in {{RFC6485}} or its successor.
 
 To complete the specification of the FC (see {{Section 4 of RFC6488}}), this document defines:
 
-1.  The object identifier (OID) that identifies the FC signed object. This OID appears in the eContentType field of the encapContentInfo object as well as the content-type signed attribute within the signerInfo structure).
+1.  The object identifier (OID) that identifies the FC signed object. This OID appears in the eContentType field of the encapContentInfo object as well as the content-type signed attribute within the signerInfo structure.
 2.  The ASN.1 syntax for the FC content, which is the payload signed by the BGP speaker. The FC content is encoded using the ASN.1 {{X.680}} Distinguished Encoding Rules (DER) {{X.690}}.
-3.  The steps required to validate an FC beyond the validation steps specified in {{RFC6488}}).
+3.  The steps required to validate an FC beyond the validation steps specified in {{RFC6488}}.
 
 ## Requirements Language
 
@@ -113,13 +113,13 @@ To complete the specification of the FC (see {{Section 4 of RFC6488}}), this doc
 
 # The FC Content-Type
 
-The content-type for a FC is defined as ForwardingCommitment and has the numerical value of 1.2.840.113549.1.9.16.1.(TBD).
+The content-type for an FC is defined as ForwardingCommitment and has the numerical value of 1.2.840.113549.1.9.16.1.(TBD).
 
 This OID MUST appear both within the eContentType in the encapContentInfo object as well as the content-type signed attribute in the signerInfo object (see {{RFC6488}}).
 
 # The FC eContent
 
-The content of a FC identifies a forwarding commitment and forwarding binding that an AS announces to other nodes upon receiving BGP-UPDATE message. Other ASes which on-path can validate the FC and perform path verification for traffic forwarding based on the AS-path information. Off-path ASes can utilize this FC for collaborative filtering. A FC is an instance of ForwardingCommitmentAttestation, formally defined by the following ASN.1 {{X.680}} module:
+The content of an FC identifies a forwarding commitment and forwarding binding that an AS announces to other nodes upon receiving a BGP-UPDATE message. Other ASes that are on-path can validate the FC and perform path verification for traffic forwarding based on the AS-path information. Off-path ASes can utilize this FC for collaborative filtering. An FC is an instance of ForwardingCommitmentAttestation, formally defined by the following ASN.1 {{X.680}} module:
 
 ~~~~~~
 RPKI-FC-2023
@@ -135,8 +135,8 @@ IMPORTS
     { iso(1) member-body(2) us(840) rsadsi(113549) pkcs(1)
       pkcs-9(9) smime(16) modules(0) id-mod-cms-2009(58) } ;
 
-id-ct-FC OBJECT IDENTIFIER ::= { iso(1) member-body(2) us(840) rsadsi(113549) pkcs(1)
-    pkcs-9(9) id-smime(16) id-ct(1) fc(TDB) }
+id-ct-FC OBJECT IDENTIFIER ::= { iso(1) member-body(2) us(840)
+    rsadsi(113549) pkcs(1) pkcs-9(9) id-smime(16) id-ct(1) fc(TDB) }
 
 ct-FC CONTENT-TYPE ::=
     { TYPE ForwardingCommitmentAttestation IDENTIFIED BY id-ct-FC }
@@ -178,7 +178,7 @@ The originatorASID field contains the AS number of the originator AS associated 
 
 ## Type Prefix
 
-Within the Prefix structure, the prefix field encodes the set of IP address prefixes which announced by the originator AS in AS-path.
+Within the Prefix structure, the prefix field encodes the set of IP address prefixes announced by the originator AS in AS_PATH.
 
 ### Element afi
 
@@ -190,26 +190,26 @@ The address field contains the IP address.
 
 ### Element prefixLength
 
-The prefixLength field contains the lenth of IP address prefix.
+The prefixLength field contains the length of the IP address prefix.
 
 ## Type ForwardingCommitment
 
-Within the ForwardingCommitment structure, the fc field encodes the forwarding commitment which generated by this AS and will be validated by other AS.
+Within the ForwardingCommitment structure, the fc field encodes the forwarding commitment generated by this AS and will be validated by other AS.
 
 ### Element id
 
-The id field contains the hash of current AS-path in the associated BGP-UPDATE plus next hop AS and above prefix filed.
+The id field contains the hash of the current AS-path in the associated BGP-UPDATE plus the next hop AS and above prefix filed.
 
 ### Element signature
 
-Field signature is a signature signs by BGP speaker who issues this FC.
+The signature field is a signature signed by the BGP speaker who issues this FC.
 
 # FC Validation
 
 
-Before a relying party can sign a new FC to announce it has trusted and selected the routing announcement, the relying party MUST first validate the FC object itself. To validate a FC, the relying party MUST perform all the validation checks specified in {{RFC6488}} as well as the following additional FC-specific validation step.
+Before a relying party can sign a new FC to announce it has trusted and selected the routing announcement, the relying party MUST first validate the FC object itself. To validate an FC, the relying party MUST perform all the validation checks specified in {{RFC6488}} as well as the following additional FC-specific validation step.
 
-- The IP Address Delegation extension {{RFC3779}} is present in the end-entity (EE) certificate (contained within the FC), and IP address prefix in the FC payload is contained within the set of IP addresses specified by the EE certificate's IP Address Delegation extension.
+- The IP Address Delegation extension {{RFC3779}} is present in the end-entity (EE) certificate (contained within the FC), and the IP address prefix in the FC payload is contained within the set of IP addresses specified by the EE certificate's IP Address Delegation extension.
 
 - The EE certificate's IP Address Delegation extension MUST NOT contain "inherit" elements described in {{RFC3779}}.
 
@@ -221,7 +221,7 @@ Before a relying party can sign a new FC to announce it has trusted and selected
 
 ## FC Generation
 
-The FC generation procedure follows the BGP-UPDATE. When one AS establish connection with its peer, it announces its route to peers. It SHOULD generate FC for each IP prefix in the BGP-UPDATE. For example, there are 3 ASes and the topology of them is in a line as {{fig-example}} shows.
+The FC generation procedure follows the BGP-UPDATE. When one AS establishes a connection with its peer, it announces its route to peers. It SHOULD generate FC for each IP prefix in the BGP-UPDATE. For example, there are 3 ASes and the topology of them is in a line as {{fig-example}} shows.
 
 ~~~~~~
 +----------+     +----------+     +----------+
@@ -230,7 +230,7 @@ The FC generation procedure follows the BGP-UPDATE. When one AS establish connec
 ~~~~~~
 {: #fig-example title="A topology example of 3 AS"}
 
-Suppose that the simplified RIB table of AS 65536 is as follows. That means there are 1 BGP-UPDATE is announced from AS 65538 to AS 65537 and 1 BGP-UPDATE is announced from AS 65537 to AS 65536. It would generate one FC for prefix 2001:db8:c::/48  when BGP-UPDATE is announced from AS 65538 to AS 65537. But when BGP-UPDATE is announced from AS 65537 to AS 65536, it would generate two FCs, one for prefix 2001:db8:c::/48 and one for prefix 2001:db8:b::/48.
+Suppose that the simplified RIB table of AS 65536 is as follows. That means there is 1 BGP-UPDATE that is announced from AS 65538 to AS 65537 and 1 BGP-UPDATE that is announced from AS 65537 to AS 65536. It would generate one FC for prefix 2001:db8:c::/48  when BGP-UPDATE is announced from AS 65538 to AS 65537. But when BGP-UPDATE is announced from AS 65537 to AS 65536, it would generate two FCs, one for the prefix 2001:db8:c::/48 and one for the prefix 2001:db8:b::/48.
 
 ~~~~~~
 Network           Next Hop        Path
@@ -277,25 +277,25 @@ FC_{65537, 65536}:
     address: 2001:db8:b::
     prefixLength: 48
   ForwardingCommitment:
-    id: HASH({65537}, 2001:db8:b::/48)
+    id: HASH({65537}, 65536, 2001:db8:b::/48)
     signature: SIGNATURE3
 ~~~~~~
 
-These FC signed objects MUST store into RPKI repository as soon as possible after BGP announcement.
+These FC signed objects MUST store in the RPKI repository as soon as possible after the BGP announcement.
 
 ## FC Verification and AS_PATH Verification
 
-When one AS receives one BGP-UPDATE, it MUST do as usual: filter BGP route using its local policy, scratch BGP route to its Route Information Base (RIB) table, generate Forwarding Information Base (FIB) table, and send it out as per routing policy.
+When one AS receives one BGP-UPDATE, it MUST do as usual: filter the BGP route using its local policy, scratch the BGP route to its Route Information Base (RIB) table, generate Forwarding Information Base (FIB) table, and send it out as per the routing policy.
 
-When the FC signed objects synchronize from RPKI repository, the BGP speaker MUST find FCs according to the ForwardingCommitment-id: HASH(current_AS_PATH, nextHopAS, prefix) in its RIB. If it finds one matched, the BGP speaker verifies the ForwardingCommitment-signature in RPKI repository.
+When the FC signed objects synchronize from the RPKI repository, the BGP speaker MUST find FCs according to the ForwardingCommitment-id: HASH(current_AS_PATH, nextHopAS, prefix) in its RIB. If it finds one matched, the BGP speaker verifies the ForwardingCommitment-signature in the RPKI repository.
 
-It SHOULD verify all FCs along the AS_PATH for AS_PATH verification. For example, AS 65536 should verify FC_{65538, 65537} and FC_{65538, 65537, 65536} for prefix 2001:db8:c::/48 in {{fig-example}}. If all FCs check passed, the AS_PATH would be a valid one.
+It SHOULD verify all FCs along the AS_PATH for AS_PATH verification. For example, AS 65536 should verify FC_{65538, 65537} and FC_{65538, 65537, 65536} for prefix 2001:db8:c::/48 in {{fig-example}}. If all FCs checks passed, the AS_PATH would be a valid one.
 
 # Security Considerations
 
 ## Route Aggregation
 
-There is no mechanism in FC could protect one prefix has been aggregated along the route propagation.
+There is no mechanism in FC that could protect one prefix that has been aggregated along the route propagation.
 
 Maybe a MinLength like MaxLength in ROA could help to mitigate the effects of route aggregation. This field means it permits who to aggregate and aggregate to which degree.
 
@@ -324,7 +324,7 @@ TBD         id-ct-FC                     [RFC-to-be]
 
 ## RPKI Signed Object registry
 
-Please add Autonomous System Provider Authorization to the RPKI Signed Object registry (https://www.iana.org/assignments/rpki/rpki.xhtml#signed-objects) as follows:
+Please add Forwarding Commitment to the RPKI Signed Object registry (https://www.iana.org/assignments/rpki/rpki.xhtml#signed-objects) as follows:
 
 ~~~~~~
 Name        OID                          Specification
